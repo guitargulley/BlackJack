@@ -207,7 +207,7 @@
 
 		if(dealerTotal === playerTotal){
 			scores.innerHTML= "It's A Push!";
-			bankValue += playerBet
+			
 		}
 
 		else if(dealerTotal > playerTotal){
