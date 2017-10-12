@@ -207,7 +207,7 @@
 
 		if(dealerTotal === playerTotal){
 			scores.innerHTML= "It's A Push!";
-			
+			bankValue += playerBet
 		}
 
 		else if(dealerTotal > playerTotal){
@@ -242,11 +242,8 @@
 		if(isWinner){
 			bankValue += (playerBet * 2);
 		}
-		else if(!isWinner){
+		if(!isWinner){
 				bankValue 
-		}
-		else{
-			bankValue += playerBet;
 		}
 		
 		document.getElementById('bank').innerHTML = bankValue
