@@ -1,4 +1,68 @@
+body{
+    background-image: url("img/blackJackTable.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.container-fluid{
+    background-color: rgba(31, 82, 31, 0.45);
+}
+button{
+    width: 100px;
+}
+#title{
+    color:whitesmoke;
+    font-weight: bold;
+    font-family: cursive;
+    margin-top: 50px;
+}
+
 .card {
-    height: 150px;
+    height: 125px;
     margin: 10px;
+}
+.cardsrow{
+    height: 150px;
+   
+}
+#bank{
+    color:whiteSmoke;
+    font-weight:bold;
+    font-style: italic;
+}
+#dealertext{
+    color:whiteSmoke;
+    font-weight:bold;
+    font-style: italic;
+
+}
+#playertext{
+    color:whiteSmoke;
+    font-weight:bold;
+    font-style: italic;   
+}
+#splitPlayerText{
+    color:whiteSmoke;
+    font-weight:bold;
+    font-style: italic;
+}
+#dealerScore{
+    color:whiteSmoke;
+    font-weight:bold;
+    font-style: italic;
+}
+#playerScore{
+    color:whiteSmoke;
+    font-weight:bold;
+    font-style: italic;
+}
+#splitPlayerScore{
+    color:whiteSmoke;
+    font-weight:bold;
+    font-style: italic;
+}
+#scores{
+    color:whitesmoke;
+    font-weight: bold;
+    font-style: italic;
+    text-decoration: underline;
 }

@@ -2,23 +2,39 @@
 	var dealBtn = document.getElementById('deal');
 	var hitBtn = document.getElementById('hit');
 	var standBtn = document.getElementById('stand');
-	var splitBtn = document.getElementById('split');
 	var playAgainBtn = document.getElementById('playAgainBtn');
+
 	var playerCards = document.getElementById('playerCards');
 	var dealerCards = document.getElementById('dealerCards');
-	var winnerDiv = document.getElementById('winner');
+	
+	var scores = document.getElementById('scores');
+	var dealerScore = document.getElementById('dealerScore');
+	var playerScore = document.getElementById('playerScore');
+	
+	var playerText = document.getElementById('playertext');
+	var dealerText = document.getElementById('dealertext');
 	
 	
+
 	let dealer = [];
 	let player = [];
+	
 	let dealerTotal = 0;
 	let playerTotal = 0;
+	let bankValue = 100;
+	let playerBet = 0;
+	//=================Betting========================
+	document.getElementById('bank').innerHTML = bankValue;
+	
 
 	//==================DEAL BUTTON====================
 
 	dealBtn.addEventListener('click', function(){
 			deck = shuffle();
 		console.log(deck);
+		playerBet= document.getElementById('bet').valueAsNumber;
+		bankValue -= playerBet;
+		document.getElementById('bank').innerHTML = bankValue;
 
 			player.push(deck.shift());
 			dealer.push(deck.shift());
@@ -28,25 +44,33 @@
 
 
 			showCardsOnTable(player[0], playerCards, true);
-			showCardsOnTable(player[1], playerCards, true);
+			showCardsOnTable(player[1], playerCards, true)
 			showCardsOnTable(dealer[0], dealerCards, true);
 			showCardsOnTable(dealer[1], dealerCards, false);
 
 			var dealerTotal = getHandValue(dealer);
 			var playerTotal = getHandValue(player);
-
+			document.getElementById('dealerScore').innerHTML = 'Dealer: ' + getCardValue(dealer[0]);
+			document.getElementById('playerScore').innerHTML = 'Player: ' + playerTotal;
 			console.log('player: ', playerTotal);
 			console.log('dealer: ', dealerTotal);
 
+			dealBtn.classList.add('hidden');
+			hitBtn.classList.remove('hidden');
+			standBtn.classList.remove('hidden');
+			dealerText.classList.remove('hidden');
+			playerText.classList.remove('hidden');
+
 			if (dealerTotal === 21 || playerTotal === 21){
-				showWinner();
+				
 				document.getElementById('dealerCards').innerHTML='';
 				showCardsOnTable(dealer[0], dealerCards, true);
 				showCardsOnTable(dealer[1], dealerCards, true);
+				dealerTotal = getHandValue(dealer);
+				document.getElementById('dealerScore').innerHTML = 'Dealer: ' + dealerTotal;
+				showWinner();
 			}
-			dealBtn.classList.toggle('hidden');
-			hitBtn.classList.toggle('hidden');
-			standBtn.classList.toggle('hidden');
+			
 	})	
 			
 	//======================SHOW CARDS ON TABLE===================
@@ -120,6 +144,8 @@
 		return handValue;
 	}	
 
+
+
 	
 	//=====================HIT BUTTON====================
 	
@@ -132,11 +158,12 @@
 
 		console.log('player ', player)
 		playerTotal = getHandValue(player);
+		document.getElementById('dealerScore').innerHTML = 'Dealer: ' + getCardValue(dealer[0]);
+		document.getElementById('playerScore').innerHTML = 'Player: ' + playerTotal;
 		console.log(playerTotal);
 		if(playerTotal >= 21){
 			showWinner();
-			hitBtn.classList.toggle('hidden');
-			standBtn.classList.toggle('hidden');
+			
 			document.getElementById('dealerCards').innerHTML='';
 			showCardsOnTable(dealer[0], dealerCards, true);
 			showCardsOnTable(dealer[1], dealerCards, true);
@@ -145,81 +172,106 @@
 	
 	//=====================STAND BUTTON=========================
 	standBtn.addEventListener('click', function(){
-		hitBtn.classList.toggle('hidden');
-		standBtn.classList.toggle('hidden');
-		
+		hitBtn.classList.add('hidden');
+		standBtn.classList.add('hidden');
+				//=======show dealer cards========
 		document.getElementById('dealerCards').innerHTML='';
-
-			
 		showCardsOnTable(dealer[0], dealerCards, true);
 		showCardsOnTable(dealer[1], dealerCards, true);
+		
+		dealerTotal = getHandValue(dealer);
+		 
 
 		while(dealerTotal <= 16){
 			dealer.push(deck.shift());
 			var lastIndex = dealer.length -1;
 			showCardsOnTable(dealer[lastIndex], dealerCards, true)
 			dealerTotal = getHandValue(dealer);
+			document.getElementById('dealerScore').innerHTML = 'Dealer: ' + dealerTotal;
 		}
-
+		
+		
 		showWinner();
 
 	})
 //========================SHOW WINNER=======================
-	function showWinner(winnerName){
-		playAgainBtn.classList.toggle('hidden');
-		winnerDiv.classList.toggle('hidden');
-		winnerDiv.classList.remove('alert-danger');
-		winnerDiv.classList.remove('alert-success');
-		winnerDiv.classList.remove('alert-warning');
-
+	function showWinner(){
+		playAgainBtn.classList.remove('hidden');
+		hitBtn.classList.add('hidden');
+		standBtn.classList.add('hidden');
+		scores.classList.remove('hidden');
+		dealerTotal = getHandValue(dealer);
+		playerTotal = getHandValue(player);
+		document.getElementById('dealerScore').innerHTML = 'Dealer: ' + dealerTotal;
+		var isWinner;
 
 		if(dealerTotal === playerTotal){
-			winnerDiv.innerHTML= "It's A Push!";
-			winnerDiv.classList.add('alert-warning');
+			scores.innerHTML= "It's A Push!";
+			
 		}
 
 		else if(dealerTotal > playerTotal){
 			if(dealerTotal === 21){
-				winnerDiv.innerHTML= ("dealer got 21, you lose");
-				winnerDiv.classList.add('alert-sucess');
+				scores.innerHTML= ("Dealer got 21, you lose");
+				isWinner = false;
 			}				
 			else if(dealerTotal > 21){
-				winnerDiv.innerHTML= ("Dealer Busted, You Win");
-				winnerDiv.classList.add('alert-success');
+				scores.innerHTML= ("Dealer Busted, You Win");
+				isWinner = true;
 			}			
 			else{
-				winnerDiv.innerHTML= ("Dealer Won");
-				winnerDiv.classList.add('alert-danger');
+				scores.innerHTML= ("Dealer Won");
+				isWinner = false;
 			}
 		}
 
-		else if(playerTotal > dealerTotal){
+		else {
 			if(playerTotal === 21){
-				winnerDiv.innerHTML= ("You got 21, you won!");
-				winnerDiv.classList.add('alert-sucess');
+				scores.innerHTML= ("You got 21, you won!");
+				isWinner = true;
 			}
 			else if(playerTotal >  21 ){
-			winnerDiv.innerHTML= ("You Busted, Dealer Won");
-			winnerDiv.classList.add('alert-danger');
+				scores.innerHTML= ("You Busted, Dealer Won");
+				isWinner = false;
 			}
 			else{
-				winnerDiv.innerHTML= ("You Won!");
-				winnerDiv.classList.add('alert-sucess');
+				scores.innerHTML= ("You Won!");
+				isWinner = true;
 			}
 		}
+		if(isWinner){
+			bankValue += (playerBet * 2);
+		}
+		if(!isWinner){
+			bankValue -= playerBet
+		}
+		
+		document.getElementById('bank').innerHTML = bankValue
+		document.getElementById('dealerScore').innerHTML = 'Dealer: ' + dealerTotal;
+		document.getElementById('playerScore').innerHTML = 'Player: ' + playerTotal;
 	}
 
 	
 
 //=======================PLAY AGAIN======================
 	playAgainBtn.addEventListener('click', function(){
-
+		document.getElementById('scores').innerHTML = '';
+		scores.classList.add('hidden');
 		player.length = 0;
 		dealer.length = 0;
 		playerTotal = 0;
 		dealerTotal = 0;
+		//================clearCards==========
 		document.getElementById('playerCards').innerHTML='';
 		document.getElementById('dealerCards').innerHTML='';
+		//=============clearScoreBoard============
+		document.getElementById('dealerScore').innerHTML='Dealer: ' + dealerTotal;
+		document.getElementById('playerScore').innerHTML='Player: ' + playerTotal;
+
+		playerBet= document.getElementById('bet').valueAsNumber;
+		bankValue -= playerBet;
+		document.getElementById('bank').innerHTML = bankValue;
+
 
 		deck = shuffle();
 		console.log(deck);
@@ -238,23 +290,31 @@
 
 			var dealerTotal = getHandValue(dealer);
 			var playerTotal = getHandValue(player);
-
+			document.getElementById('dealerScore').innerHTML = 'Dealer: ' + getCardValue(dealer[0]);
+			document.getElementById('playerScore').innerHTML = 'Player: ' + playerTotal;
 			console.log('player: ', playerTotal);
 			console.log('dealer: ', dealerTotal);
 
+			playAgainBtn.classList.add('hidden');
+			hitBtn.classList.remove('hidden');
+			standBtn.classList.remove('hidden');
+			scores.classList.remove('alert-danger');
+			scores.classList.remove('alert-success');
+			scores.classList.remove('alert-warning');
+
 			if (dealerTotal === 21 || playerTotal === 21){
-				showWinner();
+				
 				document.getElementById('dealerCards').innerHTML='';
 				showCardsOnTable(dealer[0], dealerCards, true);
 				showCardsOnTable(dealer[1], dealerCards, true);
+				dealerTotal = getHandValue(dealer);
+				document.getElementById('dealerScore').innerHTML = 'Dealer: ' + dealerTotal;
+				showWinner();
 
 			}
-			playAgainBtn.classList.toggle('hidden');
-			hitBtn.classList.toggle('hidden');
-			standBtn.classList.toggle('hidden');
-			winnerDiv.classList.remove('alert-danger');
-			winnerDiv.classList.remove('alert-success');
-			winnerDiv.classList.remove('alert-warning');
+			
+			
+			
 
 			
 			
