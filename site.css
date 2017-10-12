@@ -24,6 +24,11 @@ button{
     height: 150px;
    
 }
+.bank{
+    color:whiteSmoke;
+    font-weight:bold;
+    font-style: italic;
+}
 #bank{
     color:whiteSmoke;
     font-weight:bold;

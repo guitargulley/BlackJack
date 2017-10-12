@@ -242,8 +242,11 @@
 		if(isWinner){
 			bankValue += (playerBet * 2);
 		}
-		if(!isWinner){
-			bankValue -= playerBet
+		else if(!isWinner){
+				bankValue 
+		}
+		else{
+			bankValue += playerBet;
 		}
 		
 		document.getElementById('bank').innerHTML = bankValue
@@ -270,7 +273,7 @@
 
 		playerBet= document.getElementById('bet').valueAsNumber;
 		bankValue -= playerBet;
-		document.getElementById('bank').innerHTML = bankValue;
+		document.getElementById('bank').innerHTML =  bankValue;
 
 
 		deck = shuffle();
